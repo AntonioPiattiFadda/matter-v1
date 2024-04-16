@@ -1,0 +1,90 @@
+[
+  {
+    "status": "paid",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "pending",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "paid",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "pending",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "paid",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "pending",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "paid",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "pending",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "paid",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "pending",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  },
+  {
+    "status": "paid",
+    "invoiceId": "INV-001",
+    "from": "Company A",
+    "to": "Client X",
+    "amount": 1000,
+    "payDate": "2021-01-01"
+  }
+]

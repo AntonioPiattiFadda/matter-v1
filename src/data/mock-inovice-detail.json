@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Camiseta",
+    "quantity": 2,
+    "amount": "large",
+    "price": 15.99
+  },
+  {
+    "name": "Pantalones",
+    "quantity": 1,
+    "amount": "medium",
+    "price": 29.99
+  },
+  {
+    "name": "Zapatos",
+    "quantity": 1,
+    "amount": "10",
+    "price": 49.99
+  }
+]

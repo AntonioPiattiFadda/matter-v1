@@ -377,28 +377,6 @@ const WalletConection = ({
                 connections={connections}
                 setConnections={setConnections}
               />
-
-              {/* {connections.metamask ? (
-              <MetamaskConectionInfo />
-            ) : (
-              <>
-                <CardDescription className="text-slate-900	font-semibold text-sm mt-6">
-                  Setup crypto payouts
-                </CardDescription>
-                <Button
-                  className="flex mt-3  w-full font-normal	text-sm"
-                  onClick={handleMetamaskConnection}
-                  disabled={loading}
-                >
-                  Connect Metamask Wallet{' '}
-                  <img
-                    className="h-6 translate-y-[.03rem] ml-2"
-                    src="../../public/MetaMaskLogo.png"
-                    alt="Matter Logo"
-                  />{' '}
-                </Button>
-              </>
-            )} */}
             </div>
             <CardDescription>
               <div className="flex w-full gap-3 mt-2">

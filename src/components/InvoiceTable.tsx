@@ -17,18 +17,13 @@ import { compareDates } from '@/utils/CompareDates';
 import { formatDate } from '@/utils/FormatDate';
 import CompleteAccountFirst from '../assets/CompleteAccountFirst.png';
 import AddIcon from '../assets/AddIcon.png';
-import { InvoiceTableSkeleton } from '../components/skeleton/InvoiceTableSkeleton';
+import FirstInvoice from '../assets/FirstInvoice.png';
 interface InvoiceTableProps {
   user: User;
   connections: Connections;
-  skeleton: {
-    user: boolean;
-    metamask: boolean;
-    stripe: boolean;
-  };
 }
 
-const InvoiceTable = ({ user, connections, skeleton }: InvoiceTableProps) => {
+const InvoiceTable = ({ user, connections }: InvoiceTableProps) => {
   const [invoices, setInvoices] = useState<UserInvoices[]>([]);
 
   useEffect(() => {
@@ -159,10 +154,6 @@ const InvoiceTable = ({ user, connections, skeleton }: InvoiceTableProps) => {
     },
   ];
 
-  if (skeleton.user || skeleton.metamask || skeleton.stripe) {
-    return <InvoiceTableSkeleton />;
-  }
-
   const walletConnections = connections.stripe || connections.metamask;
 
   if (!connections.userInfo || !walletConnections) {
@@ -173,29 +164,28 @@ const InvoiceTable = ({ user, connections, skeleton }: InvoiceTableProps) => {
             <CardTitle>
               {' '}
               <img
-                className="flex h-48 ml-2"
+                className="flex h-[300px] ml-2"
                 src={CompleteAccountFirst}
                 alt="Drop image"
               />
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <CardDescription className="text-slate-900 font-bold text-xl">
+            <CardDescription className="text-slate-900 font-bold text-lg">
               {' '}
-              First, complete your account.{' '}
+              Hey! It’s time to add your biz details.
             </CardDescription>
           </CardContent>
           <CardFooter>
-            <CardDescription className="text-slate-500 text-base font-medium">
-              To send invoices add your company details, connect stripe and
-              MetaMask.
+            <CardDescription className="text-slate-500 text-base ">
+              Add your company details and connect Stripe or MetaMask. You can
+              connect one or both.
             </CardDescription>
           </CardFooter>
         </Card>
       </div>
     );
   }
-
   if (invoices.length === 0) {
     return (
       <div className="hidden  sm:grid place-content-center w-screen h-screen  bg-slate-50">
@@ -204,8 +194,8 @@ const InvoiceTable = ({ user, connections, skeleton }: InvoiceTableProps) => {
             <CardTitle>
               {' '}
               <img
-                className="flex h-48 ml-2"
-                src={CompleteAccountFirst}
+                className="flex h-[300px] ml-2"
+                src={FirstInvoice}
                 alt="Drop image"
               />
             </CardTitle>
@@ -213,10 +203,10 @@ const InvoiceTable = ({ user, connections, skeleton }: InvoiceTableProps) => {
           <CardContent>
             <CardDescription className="text-slate-900 font-bold text-xl">
               {' '}
-              Let’s make your first invoice!{' '}
+              Good work, let’s try making your first invoice.{' '}
             </CardDescription>
             <CardDescription className="text-slate-500 text-base font-sm">
-              Create your first invoice, once you do you’ll see them here.
+              Create your first invoice, once you do you’ll see those here.{' '}
             </CardDescription>
           </CardContent>
           <CardFooter>

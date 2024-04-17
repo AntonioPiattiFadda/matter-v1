@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import InvoiceTable from '../components/InvoiceTable';
 import WalletConection from '../components/WalletConection';
 import { Connections } from '@/types';
+import { DashboardSkeleton } from '@/components/skeleton/DashBoardSkeleton';
 
 const Dashboard = () => {
   const [connections, setConnections] = useState<Connections>({
@@ -13,11 +14,7 @@ const Dashboard = () => {
     id: '',
     email: '',
   });
-  const [skeleton, setSkeleton] = useState({
-    user: true,
-    metamask: true,
-    stripe: true,
-  });
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (user.id == '') {
@@ -28,7 +25,15 @@ const Dashboard = () => {
       const usuarioObjeto = JSON.parse(usuarioGuardado);
       setUser(usuarioObjeto);
     }
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, [user]);
+
+  if (loading) {
+    return <DashboardSkeleton />;
+  }
 
   return (
     <div
@@ -41,10 +46,8 @@ const Dashboard = () => {
         user={user}
         setConnections={setConnections}
         connections={connections}
-        setSkeleton={setSkeleton}
-        skeleton={skeleton}
       />
-      <InvoiceTable user={user} connections={connections} skeleton={skeleton} />
+      <InvoiceTable user={user} connections={connections} />
     </div>
   );
 };

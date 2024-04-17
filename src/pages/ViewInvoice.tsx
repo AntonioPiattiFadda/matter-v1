@@ -321,6 +321,7 @@ const ViewInvoice = () => {
                   totalAmount={invoice.total}
                   invoiceId={invoice.id || ''}
                   userId={userId || ''}
+                  serialNumber={invoice.serialNumber}
                 />
               )}
               {invoice.stripeId && (
@@ -330,6 +331,7 @@ const ViewInvoice = () => {
                   companyName={userCompanyInfo.companyName}
                   invoiceId={invoice.id || ''}
                   userId={userId || ''}
+                  serialNumber={invoice.serialNumber}
                 />
               )}
             </div>

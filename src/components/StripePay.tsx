@@ -15,6 +15,7 @@ interface StripePayProps {
   invoiceId: string;
   userId: string;
   setLoading?: (loading: boolean) => void;
+  serialNumber?: number;
 }
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_SECRET_KEY || '', {
@@ -27,6 +28,7 @@ const StripePay = ({
   companyName,
   invoiceId,
   userId,
+  serialNumber,
 }: StripePayProps) => {
   const [clientSecret, setClientSecret] = useState('');
 
@@ -99,6 +101,7 @@ const StripePay = ({
               clientSecret={clientSecret}
               invoiceId={invoiceId}
               userId={userId}
+              serialNumber={serialNumber}
             />
           </Elements>
         </div>

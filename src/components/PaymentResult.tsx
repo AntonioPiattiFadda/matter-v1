@@ -1,61 +1,83 @@
 import { updateInvoice } from '@/Services';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import AppConfetti from './confetti/AppConfetti';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from './ui/card';
+import PaidInvoice from '@/assets/PaidInvoice.png';
+import PoweredByMatter from '@/assets/PoweredByMatter.png';
 
 const PaymentResult = () => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const paymentId = searchParams.get('payment_id');
   const invoiceId = searchParams.get('invoice_id') ?? '';
+  const invoiceSerialNumber = searchParams.get('serial_number') ?? '';
   const userId = searchParams.get('user_id') ?? '';
   const metamaskPaymentId = searchParams.get('metamask_payment_id');
+
+  const todaysDate = new Date();
 
   useEffect(() => {
     if (paymentId) {
       updateInvoice(userId, invoiceId, {
         status: 'paid',
         stripeTransactionId: paymentId,
-        payDate: new Date(),
+        payDate: todaysDate,
       });
     }
     if (metamaskPaymentId) {
       updateInvoice(userId, invoiceId, {
         status: 'paid',
         metamaskHash: metamaskPaymentId,
-        payDate: new Date(),
+        payDate: todaysDate,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [invoiceId, metamaskPaymentId, paymentId, userId]);
+
+  const formattedDate = todaysDate.toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric',
+  });
 
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-slate-100 bg-opacity-50">
-        <div className="bg-white p-8 rounded shadow-md">
-          <svg
-            className="w-16 h-16 mx-auto text-green-500"
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M5 13l4 4L19 7"
+    <div className="hidden  sm:grid place-content-center w-screen h-screen  bg-slate-50">
+      <Card className="w-[500px] rounded-2xl flex flex-col items-center">
+        <AppConfetti />
+        <CardHeader>
+          <CardTitle>
+            {' '}
+            <img
+              className="flex h-[300px] ml-2"
+              src={PaidInvoice}
+              alt="invoice creator icon"
             />
-          </svg>
-          <p className="text-center text-gray-800 mt-4">
-            Success! You've completed your payment. Thank you.
-          </p>
-          <p className="text-center text-gray-800 mt-2">
-            Transaction ID: {paymentId ? paymentId : metamaskPaymentId}
-          </p>
-        </div>
-      </div>
-
-      <div>PaymentResult</div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="flex flex-col items-center gap-1">
+          <CardDescription className="text-slate-900 font-semibold text-lg">
+            {' '}
+            Invoice Paid!
+          </CardDescription>
+          <CardDescription className="text-slate-500 text-sm font-sm">
+            Invoice {invoiceSerialNumber}
+          </CardDescription>
+          <CardDescription className="text-slate-500 text-sm ">
+            Paid on {formattedDate}
+          </CardDescription>
+        </CardContent>
+        <CardFooter className="flex gap-2">
+          <img src={PoweredByMatter} alt="Powered by matter" />
+        </CardFooter>
+      </Card>
     </div>
   );
 };

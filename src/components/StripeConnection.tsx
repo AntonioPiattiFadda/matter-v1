@@ -15,13 +15,7 @@ interface StripeConnectionProps {
       metamask: boolean;
     }>
   >;
-  setSkeleton: React.Dispatch<
-    React.SetStateAction<{
-      user: boolean;
-      stripe: boolean;
-      metamask: boolean;
-    }>
-  >;
+
   loading: boolean;
 }
 
@@ -29,7 +23,6 @@ const StripeConnection = ({
   loading,
   connections,
   setConnections,
-  setSkeleton,
 }: StripeConnectionProps) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -60,11 +53,7 @@ const StripeConnection = ({
         }
       }
     });
-    setSkeleton((prevState) => ({
-      ...prevState,
-      stripe: false,
-    }));
-  }, [parsedUser.id, setConnections, setSkeleton]);
+  }, [parsedUser.id, setConnections]);
 
   useEffect(() => {
     if (account_id) {

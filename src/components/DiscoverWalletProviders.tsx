@@ -19,13 +19,7 @@ interface DiscoverWalletProvidersProps {
       metamask: boolean;
     }>
   >;
-  setSkeleton: React.Dispatch<
-    React.SetStateAction<{
-      user: boolean;
-      stripe: boolean;
-      metamask: boolean;
-    }>
-  >;
+
   loading?: boolean;
 }
 
@@ -33,7 +27,6 @@ export const DiscoverWalletProviders = ({
   setConnections,
   connections,
   loading,
-  setSkeleton,
 }: DiscoverWalletProvidersProps) => {
   const [userAccount, setUserAccount] = useState<string>('');
   const user = window.sessionStorage.getItem('user');
@@ -51,11 +44,7 @@ export const DiscoverWalletProviders = ({
         }
       });
     }
-    setSkeleton((prevState) => ({
-      ...prevState,
-      metamask: false,
-    }));
-  }, [parsedUser.id, setConnections, setSkeleton, userAccount]);
+  }, [parsedUser.id, setConnections, userAccount]);
 
   const providers = useSyncProviders();
 

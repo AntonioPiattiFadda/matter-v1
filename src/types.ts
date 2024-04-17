@@ -95,3 +95,19 @@ export interface UpdatePayInvoice {
   metamaskHash?: string;
   stripeTransactionId?: string;
 }
+
+export interface ConfettiConfig {
+  angle?: number;
+  spread?: number;
+  width?: string;
+  height?: string;
+  duration?: number;
+  dragFriction?: number;
+  stagger?: number;
+  startVelocity?: number;
+  elementCount?: number;
+  decay?: number;
+  colors?: string[];
+  random?: () => number;
+  perspective?: string;
+}

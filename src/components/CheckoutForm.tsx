@@ -12,12 +12,14 @@ interface CheckoutFormProps {
   clientSecret: string;
   invoiceId: string;
   userId: string;
+  serialNumber?: number;
 }
 
 export default function CheckoutForm({
   clientSecret,
   invoiceId,
   userId,
+  serialNumber,
 }: CheckoutFormProps) {
   const stripe = useStripe();
   const elements = useElements();
@@ -44,7 +46,6 @@ export default function CheckoutForm({
       if (paymentIntent) {
         setPaymentIntentId(paymentIntent.id as string);
       }
-
     });
   }, [clientSecret, invoiceId, stripe, userId]);
 
@@ -63,7 +64,7 @@ export default function CheckoutForm({
       elements,
       confirmParams: {
         // Make sure to change this to your payment completion page
-        return_url: `${PROD_LINK}/payment_result?&invoice_id=${invoiceId}&user_id=${userId}&payment_id=${paymentIntentId}`,
+        return_url: `${PROD_LINK}/payment_result?&invoice_id=${invoiceId}&user_id=${userId}&payment_id=${paymentIntentId}&serial_number=${serialNumber}`,
       },
     });
 

@@ -25,10 +25,11 @@ import classNames from 'classnames';
 import { Invoice, InvoiceItem, User } from '@/types';
 import { createInvoice, getUserByEmail } from '@/Services';
 import CompanyInfo from '../components/CompanyInfoComponent';
-import DiamondIcon from '../assets/DiamondIcon.png';
+import InvoiceCreater from '../assets/InvoiceCreated.png';
 import AddItem from '../assets/AddItem.png';
 import DeleteItem from '../assets/DeleteItem.png';
 import CopyBlackIcon from '../assets/CopyBlackIcon.png';
+import AppConfetti from '@/components/confetti/AppConfetti';
 
 const NoBorderStyle = {
   borderTop: 'none',
@@ -279,13 +280,14 @@ const CreateInvoice = () => {
     return (
       <div className="hidden  sm:grid place-content-center w-screen h-screen  bg-slate-50">
         <Card className="w-[500px] rounded-2xl flex flex-col items-center">
+          <AppConfetti />
           <CardHeader>
             <CardTitle>
               {' '}
               <img
                 className="flex h-48 ml-2"
-                src={DiamondIcon}
-                alt="Diamond image"
+                src={InvoiceCreater}
+                alt="invoice creator icon"
               />
             </CardTitle>
           </CardHeader>

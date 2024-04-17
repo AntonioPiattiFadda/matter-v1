@@ -5,7 +5,6 @@ import Web3 from 'web3';
 import axios from 'axios';
 import PopUpMetamask from './PopUpMetamask';
 import { RegisteredSubscription } from 'web3-eth';
-import { updateInvoice } from '@/Services';
 import ETHLogo from '../assets/ETHLogo.png';
 import { useSyncProviders } from '@/Hooks/useSyncProviders';
 import MetaMaskLogo from '../assets/MetaMaskLogo.png';
@@ -19,6 +18,7 @@ interface DiscoverWalletProvidersProps {
   totalAmount: number;
   invoiceId: string;
   userId: string;
+  serialNumber: number;
 }
 
 export const DiscoverWalletProvidersPay = ({
@@ -26,6 +26,7 @@ export const DiscoverWalletProvidersPay = ({
   totalAmount,
   invoiceId,
   userId,
+  serialNumber,
 }: DiscoverWalletProvidersProps) => {
   const [showPopUp, setShowPopUp] = useState({
     status: false,
@@ -95,7 +96,7 @@ export const DiscoverWalletProvidersPay = ({
           });
 
           setTransactionHash(transactionInfo.transactionHash.toString());
-          window.location.href = `/payment_result?metamask_payment_id=${transactionInfo.transactionHash.toString()}&invoice_id=${invoiceId}&user_id=${userId}`;
+          window.location.href = `/payment_result?metamask_payment_id=${transactionInfo.transactionHash.toString()}&invoice_id=${invoiceId}&user_id=${userId}&serial_number=${serialNumber}`;
         } else {
           showPopUpMessage('Please connect to the Ethereum');
         }

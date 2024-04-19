@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import CompanyInfo from './CompanyInfoComponent';
 import { SaveCompanyInfoschema } from '@/Validator';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,7 @@ import { Label } from '@/components/ui/label';
 import classNames from 'classnames';
 import { z, ZodError } from 'zod';
 import { Connections, User } from '@/types';
-import { getUserByEmail, updateUser } from '@/Services';
+import { updateUser } from '@/Services';
 import { DiscoverWalletProviders } from './DiscoverWalletProviders';
 import StripeConnection from './StripeConnection';
 import { getAuth, signOut } from 'firebase/auth';
@@ -29,55 +29,48 @@ interface WalletConectionProps {
       metamask: boolean;
     }>
   >;
-
   connections: Connections;
   user: User;
+  companyInfo: {
+    companyName: string;
+    businessEmail: string;
+    adress: string;
+    city: string;
+    state: string;
+    zip: string;
+    country: string;
+    taxId: string;
+  };
+  setCompanyInfo: React.Dispatch<
+    React.SetStateAction<{
+      companyName: string;
+      businessEmail: string;
+      adress: string;
+      city: string;
+      state: string;
+      zip: string;
+      country: string;
+      taxId: string;
+    }>
+  >;
+  userMetamaskAdress: string;
+  userStripeAddress: string;
 }
 
 const WalletConection = ({
   setConnections,
   connections,
   user,
+  companyInfo,
+  setCompanyInfo,
+  userMetamaskAdress,
+  userStripeAddress,
 }: WalletConectionProps) => {
   const [showForm, setShowForm] = useState(false);
-  const [companyInfo, setCompanyInfo] = useState({
-    companyName: '',
-    businessEmail: '',
-    adress: '',
-    city: '',
-    state: '',
-    zip: '',
-    country: '',
-    taxId: '',
-  });
   const [errors, setErrors] = useState<ZodError<unknown> | null>(null);
   const [loading, setLoading] = useState(false);
 
   const auth = getAuth();
-
-  useEffect(() => {
-    getUserByEmail(user.email).then((data: User | null) => {
-      if (!data) {
-        return;
-      }
-      if (data.adress && data.businessEmail && data.city && data.companyName) {
-        setConnections((prevConnections: Connections) => ({
-          ...prevConnections,
-          userInfo: true,
-        }));
-      }
-      setCompanyInfo({
-        companyName: data.companyName || '',
-        businessEmail: data.businessEmail || '',
-        adress: data.adress || '',
-        city: data.city || '',
-        state: data.state || '',
-        zip: data.zip || '',
-        country: data.country || '',
-        taxId: data.taxId || '',
-      });
-    });
-  }, [setConnections, user]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -129,16 +122,16 @@ const WalletConection = ({
         console.log(error);
       });
   };
-  // const showInfo = !skeleton.user && !skeleton.metamask && !skeleton.stripe;
 
   return (
     <div>
       <Card
-        className="w-[400px] sm-w-screen h-screen rounded-none"
+        className="w-[400px] sm-w-screen h-screen rounded-none flex flex-col"
         style={{
           borderTop: 'none',
           borderLeft: 'none',
           borderBottom: 'none',
+          minHeight: '100vh',
         }}
       >
         <>
@@ -156,6 +149,7 @@ const WalletConection = ({
                 info={companyInfo}
                 setShowForm={setShowForm}
                 setConnections={setConnections}
+                userStripeAddress={userStripeAddress}
               />
             ) : (
               <>
@@ -361,7 +355,7 @@ const WalletConection = ({
             <div
               style={
                 (connections.stripe || connections.metamask) && !showForm
-                  ? { height: 'calc(100vh - 310px)' }
+                  ? { height: 'calc(100vh - 560px)' }
                   : { height: 'auto' }
               }
               className="flex flex-col justify-end h-screen"
@@ -370,33 +364,42 @@ const WalletConection = ({
                 loading={loading}
                 connections={connections}
                 setConnections={setConnections}
+                userStripeAddress={userStripeAddress}
               />
 
               <DiscoverWalletProviders
                 loading={loading}
                 connections={connections}
                 setConnections={setConnections}
+                userMetamaskAdress={userMetamaskAdress}
               />
             </div>
-            <CardDescription>
-              <div className="flex w-full gap-3 mt-2">
-                <Button
-                  className="flex p-1 text-slate-400 text-sm	"
-                  variant="link"
-                  onClick={handleLogOut}
-                >
-                  Log Out
-                </Button>
-                <Button
-                  className="flex p-1 text-slate-400 text-sm	"
-                  variant="link"
-                >
-                  <Link to="/support">Support</Link>
-                </Button>
-              </div>
-            </CardDescription>
           </CardContent>
         </>
+        <CardDescription
+          className="h-[100%] flex flex-col justify-end pl-6"
+          style={
+            (connections.stripe || connections.metamask) && !showForm
+              ? { marginTop: '-20px' }
+              : { height: '100%' }
+          }
+        >
+          <CardDescription className="text-slate-500">
+            {user.email}
+          </CardDescription>
+          <div className="flex w-full gap-3 mt-2">
+            <Button
+              className="flex p-0 text-slate-400 text-sm	"
+              variant="link"
+              onClick={handleLogOut}
+            >
+              Log Out
+            </Button>
+            <Button className="flex p-1 text-slate-400 text-sm	" variant="link">
+              <Link to="/support">Support</Link>
+            </Button>
+          </div>
+        </CardDescription>
       </Card>
     </div>
   );

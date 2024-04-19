@@ -28,7 +28,7 @@ import CompanyInfo from '../components/CompanyInfoComponent';
 import InvoiceCreater from '../assets/InvoiceCreated.png';
 import AddItem from '../assets/AddItem.png';
 import DeleteItem from '../assets/DeleteItem.png';
-import CopyBlackIcon from '../assets/CopyBlackIcon.png';
+import CopyBlackIcon from '../assets/CopyBlackIcon.svg';
 import AppConfetti from '@/components/confetti/AppConfetti';
 
 const NoBorderStyle = {
@@ -85,7 +85,7 @@ const CreateInvoice = () => {
 
   const [invoiceInfo, setInvoiceInfo] = useState<Invoice>({
     id: '',
-    serialNumber: 0,
+    serialNumber: '',
     date: null,
     dueDate: null,
     toCompanyName: '',
@@ -162,10 +162,15 @@ const CreateInvoice = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
     if (name === 'serialNumber') {
+      if (/[a-zA-Z]/.test(value)) {
+        return;
+      }
+
       setInvoiceInfo({
         ...invoiceInfo,
-        [name]: parseInt(value),
+        [name]: value,
       });
       return;
     }
@@ -183,6 +188,7 @@ const CreateInvoice = () => {
       });
       return;
     }
+    console.log('Tmb estoy aca');
 
     setInvoiceInfo({
       ...invoiceInfo,
@@ -219,6 +225,7 @@ const CreateInvoice = () => {
   const handleSaveInvoice = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
+
     const invoiceInfoToValidate = {
       ...invoiceInfo,
       items: items,
@@ -302,7 +309,7 @@ const CreateInvoice = () => {
           </CardContent>
           <CardFooter className="flex gap-2">
             <Button onClick={handleCopy}>
-              <img className="h-6 mr-1" src={CopyBlackIcon} alt="add icon" />
+              <img className="h-5 mr-1" src={CopyBlackIcon} alt="add icon" />
               {successCreation.copied ? 'Link Copied!' : 'Copy Invoice Link'}
             </Button>
             <Button
@@ -330,7 +337,7 @@ const CreateInvoice = () => {
             style={NoBorderStyle}
           >
             <CardDescription className="flex items-center gap-2">
-              <Label className="text-slate-500 text-sm font-semibold">
+              <Label className="text-slate-500 text-xs font-semibold">
                 Invoice
               </Label>
               <Input
@@ -344,13 +351,14 @@ const CreateInvoice = () => {
                 })}
                 id="serialNumber"
                 name="serialNumber"
+                value={invoiceInfo.serialNumber}
                 type="text"
                 onChange={handleChange}
               />
             </CardDescription>
             <CardDescription className="flex flex-col justify-between sm:flex-row sm:gap-2">
               <div className="flex items-center gap-2">
-                <Label className="text-slate-500 text-sm font-semibold">
+                <Label className="text-slate-500 text-xs font-semibold">
                   Issued
                 </Label>
                 <Input
@@ -368,7 +376,7 @@ const CreateInvoice = () => {
                 />
               </div>
               <div className="flex items-center gap-2">
-                <Label className="text-slate-500 text-sm font-semibold">
+                <Label className="text-slate-500 text-xs font-semibold">
                   Due Date
                 </Label>
                 <Input
@@ -392,7 +400,7 @@ const CreateInvoice = () => {
               className="border flex flex-col  w-full h-[230px] p-3"
               style={NoBorderStyle}
             >
-              <CardDescription className="text-slate-500 text-sm font-semibold mb-2">
+              <CardDescription className="text-slate-500 text-xs font-semibold mb-2">
                 From
               </CardDescription>
               <CompanyInfo editable={false} info={userCompanyInfo} />
@@ -402,7 +410,7 @@ const CreateInvoice = () => {
               style={NoBorderStyle}
             >
               <div className="w-full">
-                <CardDescription className="text-slate-500 text-sm font-semibold mb-2">
+                <CardDescription className="text-slate-500 text-xs font-semibold mb-2">
                   To
                 </CardDescription>
                 <Input
@@ -461,11 +469,13 @@ const CreateInvoice = () => {
             <Table className="w-full p-0">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[320px]">Description</TableHead>
-                  <TableHead>QTY</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead></TableHead>
+                  <TableHead className="w-[320px] text-xs">
+                    Description
+                  </TableHead>
+                  <TableHead className="text-xs">QTY</TableHead>
+                  <TableHead className="text-xs">Price</TableHead>
+                  <TableHead className="text-xs">Amount</TableHead>
+                  <TableHead className="text-xs"></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -578,11 +588,11 @@ const CreateInvoice = () => {
             </Table>
             <div className="w-full flex justify-end">
               <Button
-                className="text-base bg-transparent text-black hover:bg-transparent "
+                className="text-sm bg-transparent text-black hover:bg-transparent "
                 type="button"
                 onClick={handleAddItem}
               >
-                <img className="h-8" src={AddItem} alt="add icon" /> Add Line
+                <img className="h-6" src={AddItem} alt="add icon" /> Add Line
                 Item
               </Button>
             </div>
@@ -651,7 +661,7 @@ const CreateInvoice = () => {
             className="border flex flex-col justify-between  w-full h-full p-3"
             style={NoBorderStyle}
           >
-            <Label className="text-slate-500 text-sm mb-2">Notes</Label>
+            <Label className="text-slate-500 text-xs mb-2">Notes</Label>
             <Input
               className={classNames('h-9 ', {
                 'border-red-500':
@@ -672,7 +682,7 @@ const CreateInvoice = () => {
             className="border flex flex-col justify-between  w-full h-full p-3"
             style={NoBorderStyle}
           >
-            <Label className="text-slate-500 text-sm mb-2">Terms</Label>
+            <Label className="text-slate-500 text-xs mb-2">Terms</Label>
             <Input
               className={classNames('h-9 ', {
                 'border-red-500':

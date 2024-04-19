@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { loginWithEmailSchema } from "@/Validator";
+import { useEffect, useState } from 'react';
+import { loginWithEmailSchema } from '@/Validator';
 import {
   Card,
   CardContent,
@@ -7,21 +7,21 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { useSearchParams } from "react-router-dom";
-import classNames from "classnames";
-import { z } from "zod";
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { useSearchParams } from 'react-router-dom';
+import classNames from 'classnames';
+import { z } from 'zod';
 import {
   getAuth,
   isSignInWithEmailLink,
   sendSignInLinkToEmail,
   signInWithEmailLink,
-} from "firebase/auth";
-import { createUser } from "@/Services";
-import MatterLogoImg from "../assets/matterLogo.png";
+} from 'firebase/auth';
+import { createUser } from '@/Services';
+import MatterLogoImg from '../assets/matterLogo.png';
 
 const PROD_LINK = import.meta.env.VITE_PROD_LINK;
 
@@ -36,13 +36,13 @@ const actionCodeSettings = {
 const Login = () => {
   const [sendedCode, setSendedCode] = useState(false);
   const [codeError, setCodeError] = useState(false);
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState('');
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<z.ZodError | null>(null);
   const [searchParams] = useSearchParams();
 
   const auth = getAuth();
-  const code = searchParams.get("code");
+  const code = searchParams.get('code');
 
   useEffect(() => {
     if (code) {
@@ -62,7 +62,7 @@ const Login = () => {
       loginWithEmailSchema.parse({ email });
       sendSignInLinkToEmail(auth, email, actionCodeSettings)
         .then(() => {
-          window.localStorage.setItem("emailForSignIn", email);
+          window.localStorage.setItem('emailForSignIn', email);
         })
         .catch((error) => {
           console.log(error);
@@ -81,22 +81,22 @@ const Login = () => {
 
   const validateSingInWithEmailLink = () => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
-      let email = window.localStorage.getItem("emailForSignIn");
+      let email = window.localStorage.getItem('emailForSignIn');
       if (!email) {
         email =
-          window.prompt("Please provide your email for confirmation") ?? "";
+          window.prompt('Please provide your email for confirmation') ?? '';
       }
       signInWithEmailLink(auth, email, window.location.href)
         .then((result) => {
-          window.localStorage.removeItem("emailForSignIn");
+          window.localStorage.removeItem('emailForSignIn');
           const user = {
             email,
             id: result.user.uid,
           };
-          window.sessionStorage.setItem("user", JSON.stringify(user));
+          window.sessionStorage.setItem('user', JSON.stringify(user));
 
           createUser({ email: user.email }, user.id).then(() => {
-            window.location.href = "/dashboard";
+            window.location.href = '/dashboard';
           });
         })
         .catch((error) => {
@@ -112,7 +112,7 @@ const Login = () => {
         <Card className="w-[300px] sm:w-[350px]">
           <CardHeader>
             <CardTitle>
-              {" "}
+              {' '}
               <img className="h-7" src={MatterLogoImg} alt="Matter Logo" />
             </CardTitle>
           </CardHeader>
@@ -129,49 +129,6 @@ const Login = () => {
               Send email again
             </Button>
           )}
-          {/* <CardContent>
-            <CardDescription className="text-slate-900 font-bold text-lg">
-              {' '}
-              Enter the code in your email.
-            </CardDescription>
-
-            <CardDescription className="flex items-center text-base font-normal text-slate-400 mb-2">
-              Didn’t get the code?{' '}
-              <Button
-                className="flex p-1 text-sky-500 font-normal text-base	"
-                variant="link"
-                onClick={handleSendCode}
-                disabled={loading}
-              >
-                Send again
-              </Button>
-            </CardDescription>
-
-            <form onSubmit={validateSingInWithEmailLink}>
-              <div className="grid w-full items-center gap-4">
-                <div className="flex flex-col space-y-1.5">
-                  <Label htmlFor="code">Code</Label>
-                  <Input id="code" placeholder="" />
-                  {codeError && (
-                    <p className="text-red-500 text-xs">Incorrect code</p>
-                  )}
-                </div>
-              </div>
-              <Button
-                className="flex mt-2 font-normal text-base"
-                disabled={loading}
-                type="submit"
-              >
-                Send Code
-              </Button>
-            </form>
-          </CardContent>
-          <CardFooter className="flex justify-between">
-            <CardDescription className="text-slate-500 text-base">
-              By signing up you agree to terms on
-              business.matter.market/invoiceterms
-            </CardDescription>
-          </CardFooter> */}
         </Card>
       </div>
     );
@@ -188,7 +145,7 @@ const Login = () => {
         <CardContent>
           <form>
             {loading ? (
-              <CardDescription className="text-sm mt-2 ">
+              <CardDescription className="text-sm mt-2  text-slate-500">
                 We've emailed you a sign on link.
               </CardDescription>
             ) : (
@@ -197,11 +154,11 @@ const Login = () => {
                   <div className="flex flex-col space-y-1.5">
                     <Label htmlFor="email">Email</Label>
                     <Input
-                      className={classNames("", {
-                        "border-red-500":
+                      className={classNames('', {
+                        'border-red-500':
                           errors &&
                           errors.issues.some((issue) => {
-                            return issue.path[0] === "email";
+                            return issue.path[0] === 'email';
                           }),
                       })}
                       id="email"
@@ -224,7 +181,7 @@ const Login = () => {
           </form>
         </CardContent>
         <CardFooter className="flex justify-between">
-          <CardDescription className="text-sm">
+          <CardDescription className="text-sm  text-slate-500">
             By continuing you agree to the terms found on
             matterinvoice.com/terms
           </CardDescription>

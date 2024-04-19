@@ -13,7 +13,7 @@ export const SaveCompanyInfoschema = z.object({
 
 export const SaveNewInvoiceInfoSchema = z.object({
   id: z.string(),
-  serialNumber: z.number().min(1),
+  serialNumber: z.string(),
   date: z.date(),
   dueDate: z.date(),
   toCompanyName: z.string().min(1),

@@ -4,11 +4,14 @@ import { CardDescription } from './ui/card';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { getUserById, updateUser } from '@/Services';
-import stripeLogo from '../assets/stripeLogo.png';
+import { updateUser } from '@/Services';
+import stripeLogo from '../assets/stripeLogo.svg';
+
+const STRIPE_SERVER_LINK = import.meta.env.VITE_STRIPE_SERVER_LINK;
+
 interface StripeConnectionProps {
   connections: Connections;
-  setConnections?: React.Dispatch<
+  setConnections: React.Dispatch<
     React.SetStateAction<{
       userInfo: boolean;
       stripe: boolean;
@@ -17,12 +20,14 @@ interface StripeConnectionProps {
   >;
 
   loading: boolean;
+  userStripeAddress: string;
 }
 
 const StripeConnection = ({
   loading,
   connections,
   setConnections,
+  userStripeAddress,
 }: StripeConnectionProps) => {
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -36,31 +41,23 @@ const StripeConnection = ({
 
   const connectStripeInApp = () => {
     updateUser(parsedUser.id, { stripeId: account_id });
-    if (setConnections) {
+    setConnections((prevConnections: Connections) => ({
+      ...prevConnections,
+      stripe: true,
+    }));
+  };
+
+  useEffect(() => {
+    if (userStripeAddress) {
+      setStripeId(userStripeAddress);
       setConnections((prevConnections: Connections) => ({
         ...prevConnections,
         stripe: true,
       }));
     }
-  };
-
-  useEffect(() => {
-    getUserById(parsedUser.id).then((user) => {
-      if (user?.stripeId) {
-        setStripeId(user.stripeId);
-        if (setConnections) {
-          setConnections((prevState) => ({ ...prevState, stripe: true }));
-        }
-      }
-    });
-  }, [parsedUser.id, setConnections]);
-
-  useEffect(() => {
     if (account_id) {
       axios
-        .get(
-          `https://matter-stripe-service.vercel.app/v1/accounts/${account_id}`
-        )
+        .get(`${STRIPE_SERVER_LINK}/v1/accounts/${account_id}`)
         .then((res) => {
           if (res.data.account.charges_enabled) {
             connectStripeInApp();
@@ -77,9 +74,7 @@ const StripeConnection = ({
   }, [account_id, success, setConnections]);
 
   const handleStripeConnection = () => {
-    const stripeFetch = axios.post(
-      'https://matter-stripe-service.vercel.app/onboard-user'
-    );
+    const stripeFetch = axios.post(`${STRIPE_SERVER_LINK}/onboard-user`);
     stripeFetch
       .then((res) => {
         window.location.href = res.data.url;
@@ -126,7 +121,7 @@ const StripeConnection = ({
               ? 'Complete your Stripe account first'
               : 'Connect Stripe'}
             <img
-              className="h-6 translate-y-[.03rem] ml-2"
+              className="h-4 translate-y-[.03rem] ml-2"
               src={stripeLogo}
               alt="Matter Logo"
             />{' '}

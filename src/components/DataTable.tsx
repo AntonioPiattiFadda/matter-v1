@@ -24,7 +24,8 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import ArrowRight from '../assets/ArrowRight.png';
 import ArrowLeft from '../assets/ArrowLeft.png';
-import AddIcon from '../assets/AddIcon.png';
+import AddIcon from '../assets/AddIcon.svg';
+import { UserInvoices } from '@/types';
 
 export type Payment = {
   id: string;
@@ -36,6 +37,7 @@ export type Payment = {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  setInvoices?: React.Dispatch<React.SetStateAction<UserInvoices[]>>;
 }
 
 export function DataTable<TData, TValue>({
@@ -65,8 +67,34 @@ export function DataTable<TData, TValue>({
   const totalPages = Math.ceil(data.length / pagination.pageSize);
   const pageIndices = Array.from({ length: totalPages }, (_, i) => i);
 
+  // const userInvoices = getUserInvoices('8oxGFFHM4YdulszF1eRj75zw7OZ2');
+  // userInvoices.then((data) => {
+  //   const mappedInvoices = data.map((invoice) => {
+  //     return {
+  //       id: invoice.id,
+  //       serialNumber: invoice.serialNumber,
+  //       status: invoice.status,
+  //       from: invoice.companyName,
+  //       to: invoice.toCompanyName,
+  //       amount: invoice.total,
+  //       dueDate: invoice.dueDate,
+  //       payDate: invoice.payDate,
+  //     };
+  //   });
+  //   const filteredData = mappedInvoices.filter((invoice) => {
+  //     console.log(value);
+
+  //     if (value === '') setInvoices(filteredData);
+  //     return invoice.status === value;
+  //   });
+  //   setInvoices(filteredData);
+  // });
   const handleChangeTab = (value: string) => {
-    table.getColumn('status')?.setFilterValue(value);
+    if (value == 'past Due') {
+      table.getColumn('status')?.setFilterValue(['pending', 'past Due']);
+    } else {
+      table.getColumn('status')?.setFilterValue(value);
+    }
   };
 
   return (
@@ -98,7 +126,11 @@ export function DataTable<TData, TValue>({
         <Button>
           <Link to="/create-invoice" className="flex ">
             {' '}
-            <img className="h-4 mr-1" src={AddIcon} alt="add icon" />
+            <img
+              className="h-4 translate-y-[2px] mr-1"
+              src={AddIcon}
+              alt="add icon"
+            />
             Create New
           </Link>
         </Button>

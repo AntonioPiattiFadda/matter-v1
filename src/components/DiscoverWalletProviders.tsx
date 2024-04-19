@@ -4,15 +4,15 @@ import { formatAddress } from '@/utils';
 import { CardDescription } from './ui/card';
 import { Button } from './ui/button';
 import Web3 from 'web3';
-import { getUserById, updateUser } from '@/Services';
-import MetaMaskLogo from '../assets/MetaMaskLogo.png';
+import { updateUser } from '@/Services';
+import MetaMaskLogo from '../assets/MetaMaskLogo.svg';
 interface DiscoverWalletProvidersProps {
   connections: {
     userInfo: boolean;
     stripe: boolean;
     metamask: boolean;
   };
-  setConnections?: React.Dispatch<
+  setConnections: React.Dispatch<
     React.SetStateAction<{
       userInfo: boolean;
       stripe: boolean;
@@ -21,32 +21,26 @@ interface DiscoverWalletProvidersProps {
   >;
 
   loading?: boolean;
+  userMetamaskAdress?: string;
 }
 
 export const DiscoverWalletProviders = ({
   setConnections,
   connections,
   loading,
+  userMetamaskAdress,
 }: DiscoverWalletProvidersProps) => {
-  const [userAccount, setUserAccount] = useState<string>('');
+  const [userAccount, setUserAccount] = useState<string>();
   const user = window.sessionStorage.getItem('user');
   const parsedUser = JSON.parse(user as string);
+  const providers = useSyncProviders();
 
   useEffect(() => {
-    //Controlar si el user tiene un metamask en la base de dataos
-    if (!userAccount) {
-      getUserById(parsedUser.id).then((user) => {
-        if (user?.metamaskAddress) {
-          setUserAccount(user.metamaskAddress);
-          if (setConnections) {
-            setConnections((prevState) => ({ ...prevState, metamask: true }));
-          }
-        }
-      });
+    if (userMetamaskAdress) {
+      setUserAccount(userMetamaskAdress);
+      setConnections((prevState) => ({ ...prevState, metamask: true }));
     }
-  }, [parsedUser.id, setConnections, userAccount]);
-
-  const providers = useSyncProviders();
+  }, [setConnections, userMetamaskAdress]);
 
   const handleConnect = async () => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -94,7 +88,7 @@ export const DiscoverWalletProviders = ({
                 >
                   Connect Metamask Wallet{' '}
                   <img
-                    className="h-6 translate-y-[.03rem] ml-2"
+                    className="h-6 translate-y-[.03rem] ml-4"
                     src={MetaMaskLogo}
                     alt="Matter Logo"
                   />{' '}
@@ -111,7 +105,7 @@ export const DiscoverWalletProviders = ({
                 >
                   Please Install Metamask{' '}
                   <img
-                    className="h-6 translate-y-[.03rem] ml-2"
+                    className="h-6 translate-y-[.03rem] ml-4"
                     src={MetaMaskLogo}
                     alt="Matter Logo"
                   />{' '}

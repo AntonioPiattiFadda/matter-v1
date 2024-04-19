@@ -5,9 +5,9 @@ import Web3 from 'web3';
 import axios from 'axios';
 import PopUpMetamask from './PopUpMetamask';
 import { RegisteredSubscription } from 'web3-eth';
-import ETHLogo from '../assets/ETHLogo.png';
+import ETHLogo from '../assets/ETHLogo.svg';
 import { useSyncProviders } from '@/Hooks/useSyncProviders';
-import MetaMaskLogo from '../assets/MetaMaskLogo.png';
+import MetaMaskLogo from '../assets/MetaMaskLogo.svg';
 import BigNumber from 'bignumber.js';
 const ETHERSCAN_API_KEY = import.meta.env.VITE_ETHERSCAN_API_KEY;
 
@@ -18,7 +18,7 @@ interface DiscoverWalletProvidersProps {
   totalAmount: number;
   invoiceId: string;
   userId: string;
-  serialNumber: number;
+  serialNumber: string;
 }
 
 export const DiscoverWalletProvidersPay = ({
@@ -131,7 +131,7 @@ export const DiscoverWalletProvidersPay = ({
               className="flex mt-3 mb-3 w-full font-normal	text-sm"
               onClick={() => sendEth(totalAmount)}
             >
-              <img className="h-6" src={ETHLogo} alt="Matter Logo" />
+              <img className="h-5 mr-2" src={ETHLogo} alt="Matter Logo" />
               Pay with ETH
             </Button>
           </div>

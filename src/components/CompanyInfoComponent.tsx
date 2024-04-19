@@ -7,6 +7,11 @@ import {
 } from '@/components/ui/card';
 import { CompanyInfo } from '@/types';
 import UpcomingPayout from '@/assets/UpcomingPayout.png';
+import { useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import axios from 'axios';
+
+const STRIPE_SK = import.meta.env.VITE_STRIPE_SK;
 
 interface CompanyInfoProps {
   editable: boolean;
@@ -19,6 +24,7 @@ interface CompanyInfoProps {
       metamask: boolean;
     }>
   >;
+  userStripeAddress?: string;
 }
 
 const CompanyInfoComponent = ({
@@ -26,7 +32,34 @@ const CompanyInfoComponent = ({
   info,
   setShowForm,
   setConnections,
+  userStripeAddress,
 }: CompanyInfoProps) => {
+  const [pending, setPending] = useState(0);
+  const location = useLocation();
+  const isDashboard = location.pathname === '/dashboard';
+
+  useEffect(() => {
+    const userStripeInfo = axios.get('https://api.stripe.com/v1/balance', {
+      headers: {
+        Authorization: `Bearer ${STRIPE_SK}`,
+        'Stripe-Account': userStripeAddress,
+      },
+    });
+    userStripeInfo
+      .then((res) => {
+        const pendingAmount = res.data.pending;
+        const totalPendingAmount = pendingAmount.reduce(
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (acc: number, curr: any) => acc + curr.amount,
+          0
+        );
+        setPending(totalPendingAmount);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [userStripeAddress]);
+
   const handleEditInfo = () => {
     if (setShowForm) {
       setShowForm(true);
@@ -38,26 +71,28 @@ const CompanyInfoComponent = ({
 
   return (
     <div>
-      <Card className="mb-6">
-        <CardHeader>
-          <img
-            className="h-[70px] w-[70px]"
-            src={UpcomingPayout}
-            alt="Upcoming Payout"
-          />
-        </CardHeader>
-        <CardContent>
-          <CardDescription className="mb-2  text-black font-medium text-sm">
-            Upcoming Stripe Payout
-          </CardDescription>
-          <CardDescription className="mb-2  text-slate-500  text-sm">
-            Payouts can take up to 5 days.
-          </CardDescription>
-          <CardDescription className="mb-2  text-black font-medium text-xl">
-            $ 0.00
-          </CardDescription>
-        </CardContent>
-      </Card>
+      {isDashboard && pending ? (
+        <Card className="mb-6">
+          <CardHeader>
+            <img
+              className="h-[70px] w-[70px]"
+              src={UpcomingPayout}
+              alt="Upcoming Payout"
+            />
+          </CardHeader>
+          <CardContent>
+            <CardDescription className="mb-1  text-black font-medium text-sm">
+              Upcoming Stripe Payout
+            </CardDescription>
+            <CardDescription className="mb-1  text-slate-500  text-sm">
+              Payouts can take up to 5 days.
+            </CardDescription>
+            <CardDescription className="mb-2  text-black font-medium text-xl">
+              $ {pending}
+            </CardDescription>
+          </CardContent>
+        </Card>
+      ) : null}
 
       <CardDescription className="mb-2  text-black font-medium text-xl">
         {info.companyName}
@@ -76,6 +111,7 @@ const CompanyInfoComponent = ({
       </CardDescription>
       {editable && (
         <Button
+          style={pending ? { marginBottom: '0' } : { marginBottom: '26vh' }}
           className="flex font-normal text-sm p-0 text-sky-500"
           variant="link"
           onClick={handleEditInfo}

@@ -39,7 +39,7 @@ export interface Connections {
 
 export interface Invoice {
   id?: string;
-  serialNumber: number;
+  serialNumber: string;
   date: Date | null | Timestamp | string;
   dueDate: Date | null | Timestamp | string;
   payDate: Date | null | Timestamp | string;

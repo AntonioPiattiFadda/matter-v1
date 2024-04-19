@@ -5,7 +5,7 @@ import { useState } from 'react';
 import { loadStripe } from '@stripe/stripe-js';
 import { Elements } from '@stripe/react-stripe-js';
 import CheckoutForm from './CheckoutForm';
-import WalletLogo from '../assets/WalletLogo.png';
+import WalletLogo from '../assets/WalletLogo.svg';
 const SERVER_LINK = import.meta.env.VITE_STRIPE_SERVER_LINK;
 
 interface StripePayProps {
@@ -15,7 +15,7 @@ interface StripePayProps {
   invoiceId: string;
   userId: string;
   setLoading?: (loading: boolean) => void;
-  serialNumber?: number;
+  serialNumber?: string;
 }
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_SECRET_KEY || '', {
@@ -74,7 +74,7 @@ const StripePay = ({
         className="text-base m-3 w-11/12 mb-5 sm:w-36 sm:text-sm"
         onClick={handleStripePay}
       >
-        <img className="h-7 mr-2" src={WalletLogo} alt="wallet icon" />
+        <img className="h-5 mr-2" src={WalletLogo} alt="wallet icon" />
         Pay with Card
       </Button>
 

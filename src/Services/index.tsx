@@ -16,6 +16,7 @@ import {
   updateDoc,
   getDoc,
   setDoc,
+  deleteDoc,
 } from 'firebase/firestore';
 
 export const getUserByEmail = async (email: string) => {
@@ -172,6 +173,21 @@ export const createInvoice = async (invoiceData: Invoice, userId: string) => {
   } catch (error) {
     console.error('Error al crear la factura: ', error);
     throw new Error('No se pudo crear la factura');
+  }
+};
+export const deleteInvoice = async (userId: string, invoiceId: string) => {
+  try {
+    const userDocRef = doc(db, 'users', userId);
+
+    const invoiceCollectionRef = collection(userDocRef, 'invoices');
+
+    const invoiceDocRef = doc(invoiceCollectionRef, invoiceId);
+
+    await deleteDoc(invoiceDocRef);
+    return invoiceId;
+  } catch (error) {
+    console.error('Error al eliminar la factura: ', error);
+    throw new Error('No se pudo eliminar la factura');
   }
 };
 

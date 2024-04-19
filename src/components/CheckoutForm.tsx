@@ -12,7 +12,7 @@ interface CheckoutFormProps {
   clientSecret: string;
   invoiceId: string;
   userId: string;
-  serialNumber?: number;
+  serialNumber?: string;
 }
 
 export default function CheckoutForm({

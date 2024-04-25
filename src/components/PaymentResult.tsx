@@ -1,4 +1,4 @@
-import { updateInvoice } from '@/Services';
+import { getUserEmail, sendEmail, updateInvoice } from '@/Services';
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import AppConfetti from './confetti/AppConfetti';
@@ -25,6 +25,15 @@ const PaymentResult = () => {
   const todaysDate = new Date();
 
   useEffect(() => {
+    getUserEmail(userId).then((email) => {
+      sendEmail(email ?? '')
+        .then(() => {
+          console.log('Email sent');
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
     if (paymentId) {
       updateInvoice(userId, invoiceId, {
         status: 'paid',

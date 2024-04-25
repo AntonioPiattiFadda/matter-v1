@@ -38,6 +38,18 @@ export const getUserByEmail = async (email: string) => {
   return user;
 };
 
+export const getUserEmail = async (id: string) => {
+  const docRef = doc(db, 'users', id);
+  const docSnap = await getDoc(docRef);
+
+  if (docSnap.exists()) {
+    const userData = docSnap.data();
+    return userData.email;
+  } else {
+    return null; // Opcional: manejar el caso cuando el usuario no existe
+  }
+};
+
 export const getUserById = async (userId: string): Promise<User | null> => {
   try {
     const invoiceDoc = doc(db, 'users', userId);
@@ -210,5 +222,77 @@ export const updateInvoice = async (
   } catch (error) {
     console.error('Error al actualizar el invoice: ', error);
     throw new Error('No se pudo actualizar el invoice');
+  }
+};
+
+export const sendEmail = async (email: string) => {
+  const message = {
+    to: [email],
+    message: {
+      subject: 'Great news! Your invoice was paid!',
+      html: `<html>
+        <head>
+          <style>
+            body {
+              font-family: 'Inter', sans-serif;
+              background-color: #f0f0f0;
+            }
+            .container {
+              width: 514px;
+              margin: 5px;
+              padding: 20px;
+              background-color: #fff;
+              border-radius: 5px;
+              border: 1px solid #e5e7eb;
+              box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+              align-items: center;
+            }
+            h1 {
+              color: #0F172A;
+              font-size: 18px;
+              font-weight: 600;
+            }
+            p{
+              color: #64748B;
+              font-size: 14px;
+              font-weight: 400;
+
+            }
+            .check {
+              width: 70px;
+              height: 70px;
+            }
+            .matter {
+              width: 100px;
+              height: 23px;
+            }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+          <img class="check" src="https://i.ibb.co/vXGrfWx/Checkmark-2.png" alt="Checkmark-2" border="0">     
+          <h1>Great news! Your invoice was paid!</h1>
+          <p>See the details in your account.</p>
+          
+          <img  class="matter"  src="https://i.ibb.co/7NH6LNk/V2-Matter-Logo-SVG-Black-1.png" alt="V2-Matter-Logo-SVG-Black-1" border="0">
+
+
+          </div>
+        </body>
+      </html>`,
+      text: 'This is',
+    },
+  };
+
+  try {
+    const mailCollection = collection(db, 'mail');
+
+    const mailRef = doc(mailCollection);
+
+    await setDoc(mailRef, message);
+
+    return mailRef;
+  } catch (error) {
+    throw new Error('No se pudo crear el mail');
   }
 };
